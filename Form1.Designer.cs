@@ -205,7 +205,7 @@
             // SJF_Timer
             // 
             this.SJF_Timer.Interval = 1000;
-            this.SJF_Timer.Tick += new System.EventHandler(this.SJF_Timer1_Tick);
+            this.SJF_Timer.Tick += new System.EventHandler(this.SJF_Timer_Tick);
             // 
             // FCFS_Timer
             // 

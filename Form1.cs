@@ -79,6 +79,11 @@ namespace DemoGUI
             MinimumSize = MaximumSize;
         }
 
+
+
+
+
+        /*---------------------------------------------------------reset------------------------------------------------------------------------*/
         private void Reset()
         {
             FCFS_Rest();
@@ -86,6 +91,10 @@ namespace DemoGUI
             PIOR_Rest();
             RR_Rest();
         }
+        /*--------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
 
 
         /*--------------------------------------------------------Start of FCFS functions--------------------------------------------------------*/
@@ -325,7 +334,7 @@ namespace DemoGUI
         }       
 
         /*---------------------------------Dynamic Logic--------------------------------*/
-        private void FCFS_Dynamic_Process()
+        private void FCFS_Logic()
         {
             Process tempProcess = FCFS_Input_Queue.Dequeue();
             FCFS_NextPossibleSlot = FCFS_ACC + tempProcess.burst_time;
@@ -337,7 +346,7 @@ namespace DemoGUI
                 x++;
             }
         }
-        private void FCFS_DisplayProcessFor1S()
+        private void FCFS_Display()
         {
             int FCFS_Time_Acc = FCFS_Display_Queue.Peek().arrival_time;
             Process tempProcess;
@@ -413,13 +422,13 @@ namespace DemoGUI
                 if (FCFS_Input_Queue.Count != 0  && FCFS_ACC == FCFS_NextPossibleSlot)
                 {
                     FCFS_Timer.Stop();
-                    FCFS_Dynamic_Process();
+                    FCFS_Logic();
                 }
 
                 if (FCFS_Display_Queue.Count != 0)
                 {
                     FCFS_updateTable();
-                    FCFS_DisplayProcessFor1S();
+                    FCFS_Display();
                 }
                 else
                 {
@@ -471,11 +480,11 @@ namespace DemoGUI
 
 
                 if (FCFS_Input_Queue.Count != 0 && FCFS_ACC == FCFS_NextPossibleSlot)
-                    FCFS_Dynamic_Process();
+                    FCFS_Logic();
                 if (FCFS_Display_Queue.Count != 0)
                 {
                     FCFS_updateTable();
-                    FCFS_DisplayProcessFor1S();
+                    FCFS_Display();
                 }
                 else
                 {
@@ -506,6 +515,14 @@ namespace DemoGUI
                 if (FCFS_Display_Queue.Count == 0 && FCFS_Input_Queue.Count == 0 || !FCFS_Jump)
                     break;
             }
+        }
+        private void FCFS_trackBar_Scroll(object sender, EventArgs e)
+        {
+            if (FCFS_trackBar.Value != 0)
+                FCFS_Timer.Interval = FCFS_trackBar.Value*1000;
+            else
+                FCFS_Timer.Interval = 1000;
+
         }
 
         /*----------------------------------Check box handler----------------------------*/
@@ -811,11 +828,6 @@ namespace DemoGUI
 
 
 
-
-
-
-
-
         /*--------------------------------------------------------Start of SJF functions--------------------------------------------------------*/
         private void SJF_Insert_btn_Click(object sender, EventArgs e)
         {
@@ -931,100 +943,7 @@ namespace DemoGUI
                 SJF_BurstTime_textbook.Clear();
             }
         }
-        private void SJF_Logic()
-        {
-            int len, timeGivenToProcessOnCpu, first_index, last_index;
-            Process[] array;
 
-            /*-----------------------------------------------------sort the queue of processes------------------------------------------------------------*/
-            array = SJF_Input_Queue.ToArray();
-            Array.Sort(array, new ArrivalTimeComparer());
-            len = SJF_Input_Queue.Count;
-            first_index = 0;
-            SJF_ACC = array[0].arrival_time;
-            /*-----select  processes that have min arrival time then choose from them the process whose burst time is minimum -------*/
-            for (int i = 0; i<len; i++)
-            {
-                if (array[i].arrival_time <= SJF_ACC && array[i].burst_time < array[first_index].burst_time)
-                    first_index = i;
-            }
-            last_index = first_index;
-            while (last_index < len-1 && array[first_index].arrival_time == array[last_index+1].arrival_time)
-                last_index++;
-            /*----------------------------OPTION Add 1S of process to Display Queue---------------*/
-            if (SJF_Preemtive_Version)
-            {
-                timeGivenToProcessOnCpu = 1;
-                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
-
-                SJF_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
-            }
-            /*----------------------------OPTION Add many 1s of process to Display Queue----------*/
-            else
-            {
-                timeGivenToProcessOnCpu = array[first_index].burst_time;
-                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
-
-                int counter = timeGivenToProcessOnCpu;
-                int x = array[first_index].arrival_time;
-                for (int i = 0; i < counter; i++)
-                    SJF_Display_Queue.Enqueue(new Process(array[first_index].Pid, 1+x, x++));
-            }
-
-            SJF_NextPossibleSlot = SJF_ACC + timeGivenToProcessOnCpu;
-            /*-------------------Update arrival time----------------------------------------------*/
-            for (int i = 0; i<len; i++)
-            {
-                if (array[i].arrival_time == SJF_ACC)
-                    array[i].increaseArrivalTime(timeGivenToProcessOnCpu);
-                else if (array[i].arrival_time < timeGivenToProcessOnCpu + SJF_ACC)
-                    array[i].arrival_time = timeGivenToProcessOnCpu + SJF_ACC;
-            }
-            SJF_Input_Queue = new Queue<Process>(array);
-            SJF_Input_Queue = new Queue<Process>(SJF_Input_Queue.Where(obj => obj.burst_time != 0));
-        }
-
-        private void SJF_Display()
-        {
-            int SJF_Time_Acc = SJF_Display_Queue.Peek().arrival_time;
-            Process tempProcess;
-            while (SJF_Display_Queue.Count != 0)
-            {
-                tempProcess = SJF_Display_Queue.Dequeue();
-                /*----------------------------------time chart---------------------------------------*/
-                WF.Label tempLabel_Time = new WF.Label();
-                tempLabel_Time.Text = SJF_Time_Acc.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Time.Width = 35;
-                else
-                    tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!SJF_Page)
-                    SJF_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
-                else
-                    SJF_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
-                /*------------------------------gantt chart code--------------------------------------*/
-                WF.Label tempLabel_Process = new WF.Label();
-                tempLabel_Process.Enabled = true;
-                tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
-                tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
-                tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Process.Width = 35;
-                else
-                    tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!SJF_Page)
-                    SJF_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
-                else
-                    SJF_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
-                /*---------------------------------update SJF_ACC-------------------------------------*/
-                SJF_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
-                /*-----------------------------------Finishing Algorithm------------------------------*/
-                if (SJF_Live)
-                    break;
-            }
-        }
 
         /*-------------------------------------static Logic------------------------------*/
         private void SJF_Ok_btn_Click(object sender, EventArgs e)
@@ -1058,7 +977,6 @@ namespace DemoGUI
             SJF_Ok_btn.Enabled = false;
             SJF_NoOfProcesses_textbook.ReadOnly = true;
         }
-
         private void SJF_Static_Logic()
         {
             int len, timeGivenToProcessOnCpu, first_index, last_index;
@@ -1129,7 +1047,6 @@ namespace DemoGUI
             SJF_Process_flowLayoutPanel.HorizontalScroll.Value = SJF_hScrollBar.Value;
             SJF_updateScrolling();
         }
-
         private void SJF_Static_Display()
         {
             int noOfIdleSlot = 0;
@@ -1218,6 +1135,99 @@ namespace DemoGUI
         }
 
         /*------------------------------------Dynamic Logic------------------------------*/
+        private void SJF_Logic()
+        {
+            int len, timeGivenToProcessOnCpu, first_index, last_index;
+            Process[] array;
+
+            /*-----------------------------------------------------sort the queue of processes------------------------------------------------------------*/
+            array = SJF_Input_Queue.ToArray();
+            Array.Sort(array, new ArrivalTimeComparer());
+            len = SJF_Input_Queue.Count;
+            first_index = 0;
+            SJF_ACC = array[0].arrival_time;
+            /*-----select  processes that have min arrival time then choose from them the process whose burst time is minimum -------*/
+            for (int i = 0; i<len; i++)
+            {
+                if (array[i].arrival_time <= SJF_ACC && array[i].burst_time < array[first_index].burst_time)
+                    first_index = i;
+            }
+            last_index = first_index;
+            while (last_index < len-1 && array[first_index].arrival_time == array[last_index+1].arrival_time)
+                last_index++;
+            /*----------------------------OPTION Add 1S of process to Display Queue---------------*/
+            if (SJF_Preemtive_Version)
+            {
+                timeGivenToProcessOnCpu = 1;
+                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
+
+                SJF_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
+            }
+            /*----------------------------OPTION Add many 1s of process to Display Queue----------*/
+            else
+            {
+                timeGivenToProcessOnCpu = array[first_index].burst_time;
+                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
+
+                int counter = timeGivenToProcessOnCpu;
+                int x = array[first_index].arrival_time;
+                for (int i = 0; i < counter; i++)
+                    SJF_Display_Queue.Enqueue(new Process(array[first_index].Pid, 1+x, x++));
+            }
+
+            SJF_NextPossibleSlot = SJF_ACC + timeGivenToProcessOnCpu;
+            /*-------------------Update arrival time----------------------------------------------*/
+            for (int i = 0; i<len; i++)
+            {
+                if (array[i].arrival_time == SJF_ACC)
+                    array[i].increaseArrivalTime(timeGivenToProcessOnCpu);
+                else if (array[i].arrival_time < timeGivenToProcessOnCpu + SJF_ACC)
+                    array[i].arrival_time = timeGivenToProcessOnCpu + SJF_ACC;
+            }
+            SJF_Input_Queue = new Queue<Process>(array);
+            SJF_Input_Queue = new Queue<Process>(SJF_Input_Queue.Where(obj => obj.burst_time != 0));
+        }
+        private void SJF_Display()
+        {
+            int SJF_Time_Acc = SJF_Display_Queue.Peek().arrival_time;
+            Process tempProcess;
+            while (SJF_Display_Queue.Count != 0)
+            {
+                tempProcess = SJF_Display_Queue.Dequeue();
+                /*----------------------------------time chart---------------------------------------*/
+                WF.Label tempLabel_Time = new WF.Label();
+                tempLabel_Time.Text = SJF_Time_Acc.ToString();
+                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
+                    tempLabel_Time.Width = 35;
+                else
+                    tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+
+                if (!SJF_Page)
+                    SJF_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
+                else
+                    SJF_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
+                /*------------------------------gantt chart code--------------------------------------*/
+                WF.Label tempLabel_Process = new WF.Label();
+                tempLabel_Process.Enabled = true;
+                tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
+                tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
+                tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
+                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
+                    tempLabel_Process.Width = 35;
+                else
+                    tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+
+                if (!SJF_Page)
+                    SJF_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
+                else
+                    SJF_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
+                /*---------------------------------update SJF_ACC-------------------------------------*/
+                SJF_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
+                /*-----------------------------------Finishing Algorithm------------------------------*/
+                if (SJF_Live)
+                    break;
+            }
+        }
         private void SJF_updateTable()
         {
             /*---------------- update table---------------------*/
@@ -1254,7 +1264,7 @@ namespace DemoGUI
         }
 
         bool SJF_Page = false;
-        private void SJF_Timer1_Tick(object sender, EventArgs e)
+        private void SJF_Timer_Tick(object sender, EventArgs e)
         {
             if (!SJF_Jump)
             {
@@ -1375,7 +1385,13 @@ namespace DemoGUI
                     break;
             }
         }
-
+        private void SJF_trackBar_Scroll(object sender, EventArgs e)
+        {
+            if (SJF_trackBar.Value != 0)
+                SJF_Timer.Interval = SJF_trackBar.Value*1000;
+            else
+                SJF_Timer.Interval = 1000;
+        }
         /*-------------------------------------Check box handler--------------------------*/
         private void SJF_Version_checkBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -1697,11 +1713,6 @@ namespace DemoGUI
 
 
 
-
-
-
-
-
         /*--------------------------------------------------------Start of PIOR functions--------------------------------------------------------*/
 
         private void PIOR_Insert_btn_Click(object sender, EventArgs e)
@@ -1832,101 +1843,7 @@ namespace DemoGUI
             }
 
         }
-        private void PIOR_Logic()
-        {
-            int len, timeGivenToProcessOnCpu, first_index, last_index;
-            Process[] array;
-  
-            /*-----------------------------------------------------sort the queue of processes------------------------------------------------------------*/
-            array = PIOR_Input_Queue.ToArray();
-            Array.Sort(array, new ArrivalTimeComparer());
-            len = PIOR_Input_Queue.Count;
-            first_index = 0;
-            PIOR_ACC = array[0].arrival_time;
 
-            /*-----select  processes that have min arrival time then choose from them the process whose burst time is minimum -------*/
-            for (int i = 0; i<len; i++)
-            {
-                if (array[i].arrival_time <= PIOR_ACC && array[i].piority < array[first_index].piority)
-                    first_index = i;
-            }
-            last_index = first_index;
-            while (last_index < len-1 && array[first_index].arrival_time == array[last_index+1].arrival_time)
-                last_index++;
-
-            /*----------------------------OPTION Add 1S of process to Display Queue---------------*/
-            if (PIOR_Preemtive_Version)
-            {
-                timeGivenToProcessOnCpu = 1;
-                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
-
-                PIOR_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
-            }
-            /*----------------------------OPTION Add many 1s of process to Display Queue----------*/
-            else
-            {
-                timeGivenToProcessOnCpu = array[first_index].burst_time;
-                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
-
-                int counter = timeGivenToProcessOnCpu;
-                int x = array[first_index].arrival_time;
-                for (int i = 0; i < counter; i++)
-                    PIOR_Display_Queue.Enqueue(new Process(array[first_index].Pid, 1+x, x++));
-            }
-
-            PIOR_NextPossibleSlot = PIOR_ACC + timeGivenToProcessOnCpu;
-            /*---------------------------------------------------------------------------Update arrival time-----------------------------------------------*/
-            for (int i = 0; i<len; i++)
-            {
-                if (array[i].arrival_time == PIOR_ACC)
-                    array[i].increaseArrivalTime(timeGivenToProcessOnCpu);
-                else if (array[i].arrival_time < timeGivenToProcessOnCpu + PIOR_ACC)
-                    array[i].arrival_time = timeGivenToProcessOnCpu + PIOR_ACC;
-            }
-            PIOR_Input_Queue = new Queue<Process>(array);
-            PIOR_Input_Queue = new Queue<Process>(PIOR_Input_Queue.Where(obj => obj.burst_time != 0));
-        }
-        private void PIOR_Display()
-        {
-            int PIOR_Time_Acc = PIOR_Display_Queue.Peek().arrival_time;
-            Process tempProcess;
-            while (PIOR_Display_Queue.Count != 0)
-            {
-                tempProcess = PIOR_Display_Queue.Dequeue();
-                /*----------------------------------time chart---------------------------------------*/
-                WF.Label tempLabel_Time = new WF.Label();
-                tempLabel_Time.Text = PIOR_Time_Acc.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Time.Width = 35;
-                else
-                    tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!PIOR_Page)
-                    PIOR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
-                else
-                    PIOR_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
-                /*------------------------------gantt chart code--------------------------------------*/
-                WF.Label tempLabel_Process = new WF.Label();
-                tempLabel_Process.Enabled = true;
-                tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
-                tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
-                tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Process.Width = 35;
-                else
-                    tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!PIOR_Page)
-                    PIOR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
-                else
-                    PIOR_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
-                /*---------------------------------update PIOR_ACC-------------------------------------*/
-                PIOR_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
-                /*-----------------------------------Finishing Algorithm------------------------------*/
-                if (PIOR_Live)
-                    break;
-            }
-        }
 
         /*-------------------------------------static Logic------------------------------*/
         private void PIOR_Ok_btn_Click(object sender, EventArgs e)
@@ -1994,7 +1911,6 @@ namespace DemoGUI
                     timeGivenToProcessOnCpu = array[last_index+1].arrival_time - array[last_index].arrival_time;
                     array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
                     PIOR_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
-                    // new Process(array[first_index].Pid, timeGivenToProcessOnCpu + [first_index].arrival_time, [first_index].arrival_time);
                 }
                 /*----------------------------OPTION Run all remaining time-------------*/
                 else
@@ -2003,8 +1919,7 @@ namespace DemoGUI
                     array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
                     PIOR_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
                 }
-
-                /*---------------------------------------------------------------------------Update arrival time-----------------------------------------------*/
+                /*------------------------Update arrival time---------------------------*/
                 for (int i = 0; i<len; i++)
                 {
                     if (array[i].arrival_time == PIOR_ACC)
@@ -2012,10 +1927,10 @@ namespace DemoGUI
                     else if (array[i].arrival_time < timeGivenToProcessOnCpu + PIOR_ACC)
                         array[i].arrival_time = timeGivenToProcessOnCpu + PIOR_ACC;
                 }
-                /*--------------------------------------------------------------------Check Fininshing algorith-------------------------------------------------*/
                 PIOR_Input_Queue = new Queue<Process>(array);
                 PIOR_Input_Queue = new Queue<Process>(PIOR_Input_Queue.Where(obj => obj.burst_time != 0));
-                if (PIOR_Live || PIOR_Input_Queue.Count == 0)
+                /*-----------------------------Check Fininshing algorith----------------*/
+                if (PIOR_Input_Queue.Count == 0)
                     break;
             }
         }
@@ -2125,6 +2040,101 @@ namespace DemoGUI
         }
 
         /*------------------------------------Dynamic Logic------------------------------*/
+        private void PIOR_Logic()
+        {
+            int len, timeGivenToProcessOnCpu, first_index, last_index;
+            Process[] array;
+
+            /*-----------------------------------------------------sort the queue of processes------------------------------------------------------------*/
+            array = PIOR_Input_Queue.ToArray();
+            Array.Sort(array, new ArrivalTimeComparer());
+            len = PIOR_Input_Queue.Count;
+            first_index = 0;
+            PIOR_ACC = array[0].arrival_time;
+
+            /*-----select  processes that have min arrival time then choose from them the process whose burst time is minimum -------*/
+            for (int i = 0; i<len; i++)
+            {
+                if (array[i].arrival_time <= PIOR_ACC && array[i].piority < array[first_index].piority)
+                    first_index = i;
+            }
+            last_index = first_index;
+            while (last_index < len-1 && array[first_index].arrival_time == array[last_index+1].arrival_time)
+                last_index++;
+
+            /*----------------------------OPTION Add 1S of process to Display Queue---------------*/
+            if (PIOR_Preemtive_Version)
+            {
+                timeGivenToProcessOnCpu = 1;
+                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
+
+                PIOR_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
+            }
+            /*----------------------------OPTION Add many 1s of process to Display Queue----------*/
+            else
+            {
+                timeGivenToProcessOnCpu = array[first_index].burst_time;
+                array[first_index].decreaseBurstTime(timeGivenToProcessOnCpu);
+
+                int counter = timeGivenToProcessOnCpu;
+                int x = array[first_index].arrival_time;
+                for (int i = 0; i < counter; i++)
+                    PIOR_Display_Queue.Enqueue(new Process(array[first_index].Pid, 1+x, x++));
+            }
+
+            PIOR_NextPossibleSlot = PIOR_ACC + timeGivenToProcessOnCpu;
+            /*---------------------------------------------------------------------------Update arrival time-----------------------------------------------*/
+            for (int i = 0; i<len; i++)
+            {
+                if (array[i].arrival_time == PIOR_ACC)
+                    array[i].increaseArrivalTime(timeGivenToProcessOnCpu);
+                else if (array[i].arrival_time < timeGivenToProcessOnCpu + PIOR_ACC)
+                    array[i].arrival_time = timeGivenToProcessOnCpu + PIOR_ACC;
+            }
+            PIOR_Input_Queue = new Queue<Process>(array);
+            PIOR_Input_Queue = new Queue<Process>(PIOR_Input_Queue.Where(obj => obj.burst_time != 0));
+        }
+        private void PIOR_Display()
+        {
+            int PIOR_Time_Acc = PIOR_Display_Queue.Peek().arrival_time;
+            Process tempProcess;
+            while (PIOR_Display_Queue.Count != 0)
+            {
+                tempProcess = PIOR_Display_Queue.Dequeue();
+                /*----------------------------------time chart---------------------------------------*/
+                WF.Label tempLabel_Time = new WF.Label();
+                tempLabel_Time.Text = PIOR_Time_Acc.ToString();
+                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
+                    tempLabel_Time.Width = 35;
+                else
+                    tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+
+                if (!PIOR_Page)
+                    PIOR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
+                else
+                    PIOR_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
+                /*------------------------------gantt chart code--------------------------------------*/
+                WF.Label tempLabel_Process = new WF.Label();
+                tempLabel_Process.Enabled = true;
+                tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
+                tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
+                tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
+                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
+                    tempLabel_Process.Width = 35;
+                else
+                    tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+
+                if (!PIOR_Page)
+                    PIOR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
+                else
+                    PIOR_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
+                /*---------------------------------update PIOR_ACC-------------------------------------*/
+                PIOR_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
+                /*-----------------------------------Finishing Algorithm------------------------------*/
+                if (PIOR_Live)
+                    break;
+            }
+        }
         private void PIOR_updateTable()
         {
             /*---------------- update table---------------------*/
@@ -2283,7 +2293,13 @@ namespace DemoGUI
                     break;
             }
         }
-
+        private void PIOR_trackBar_Scroll(object sender, EventArgs e)
+        {
+            if (PIOR_trackBar.Value != 0)
+                PIOR_Timer.Interval = PIOR_trackBar.Value*1000;
+            else
+                PIOR_Timer.Interval = 1000;
+        }
         /*-------------------------------------Check box handler--------------------------*/
         private void PIOR_Version_checkBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -2594,10 +2610,6 @@ namespace DemoGUI
         }
 
         /*--------------------------------------------------------End of PIOR functions--------------------------------------------------------*/
-
-
-
-
 
 
 
@@ -2928,7 +2940,7 @@ namespace DemoGUI
 
         /*---------------------------------Dynamic Logic--------------------------------*/
         bool flag = false;
-        private void RR_Dynamic_Process()
+        private void RR_Logic()
         {
             Process tempProcess = RR_Input_Queue.Dequeue();
 
@@ -2960,7 +2972,7 @@ namespace DemoGUI
                 flag = true;
             }
         }
-        private void RR_DisplayProcessFor1S()
+        private void RR_Display()
         {
             int RR_Time_Acc = RR_Display_Queue.Peek().arrival_time;
             Process tempProcess;
@@ -3049,13 +3061,13 @@ namespace DemoGUI
                 if (RR_Input_Queue.Count != 0  && RR_ACC == RR_NextPossibleSlot)
                 {
                     RR_Timer.Stop();
-                    RR_Dynamic_Process();
+                    RR_Logic();
                 }
 
                 if (RR_Display_Queue.Count != 0)
                 {
                     RR_updateTable();
-                    RR_DisplayProcessFor1S();
+                    RR_Display();
                 }
                 else
                 {
@@ -3117,11 +3129,11 @@ namespace DemoGUI
                 }
 
                 if (RR_Input_Queue.Count != 0 && RR_ACC == RR_NextPossibleSlot)
-                    RR_Dynamic_Process();
+                    RR_Logic();
                 if (RR_Display_Queue.Count != 0)
                 {
                     RR_updateTable();
-                    RR_DisplayProcessFor1S();
+                    RR_Display();
                 }
                 else
                 {
@@ -3153,7 +3165,13 @@ namespace DemoGUI
                     break;
             }
         }
-
+        private void RR_trackBar_Scroll(object sender, EventArgs e)
+        {
+            if (RR_trackBar.Value != 0)
+                RR_Timer.Interval = RR_trackBar.Value*1000;
+            else
+                RR_Timer.Interval = 1000;
+        }
         /*----------------------------------Check box handler----------------------------*/
         private void RR_Live_checkBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -3423,22 +3441,13 @@ namespace DemoGUI
 
 
 
-       
-
-        
-
-
 
         /*--------------------------------------------------------empty Functions------------------------------------------------------------*/
         private void Form1_Load(object sender, EventArgs e) { }
-     
-
         private void FCFS_Click(object sender, EventArgs e) { }
         private void SJF_Click(object sender, EventArgs e) { }
         private void Priority_Click(object sender, EventArgs e) { }
         private void Round_Robin_Click(object sender, EventArgs e) { }
-
-
         private void FCFS_ArrivalTime_label_Click(object sender, EventArgs e) { }
         private void FCFS_NoOfProcesses_Label_Click(object sender, EventArgs e) { }
         private void FCFS_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
@@ -3452,9 +3461,6 @@ namespace DemoGUI
         private void FCFS_avgWaitingTimeResult_label_Click(object sender, EventArgs e) { }
         private void FCFS_CurrentSlot_label_Click(object sender, EventArgs e) { }
         private void FCFS_avgTurnAroundTime_label_Click(object sender, EventArgs e) { }
-
-
-
         private void SJF_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
         private void SJF_BurstTime_textbook_TextChanged(object sender, EventArgs e) { }
         private void SJF_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
@@ -3468,9 +3474,6 @@ namespace DemoGUI
         private void SJF_dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void SJF_CurrentSlot_label_Click(object sender, EventArgs e) { }
         private void SJF_Slot_label_Click(object sender, EventArgs e) { }
-
-
-
         private void PIOR_Piority_textbook_TextChanged(object sender, EventArgs e) { }
         private void PIOR_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
         private void PIOR_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
@@ -3479,64 +3482,16 @@ namespace DemoGUI
         private void PIOR_NoOfProcess_label_Click(object sender, EventArgs e) { }
         private void PIOR_BurstTime_label_Click(object sender, EventArgs e) { }
         private void PIOR_Piority_label_Click(object sender, EventArgs e) { }
-
-
         private void RR_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
         private void RR_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
         private void RR_BurstTime_textbook_TextChanged(object sender, EventArgs e) { }
         private void RR_NoOfProcesses_Label_Click(object sender, EventArgs e) { }
         private void RR_ArrivalTime_label_Click(object sender, EventArgs e) { }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FCFS_trackBar_Scroll(object sender, EventArgs e)
-        {
-            if(FCFS_trackBar.Value != 0)
-                FCFS_Timer.Interval = FCFS_trackBar.Value*1000;
-            else
-                FCFS_Timer.Interval = 1000;
-
-        }
-
-        private void RR_trackBar_Scroll(object sender, EventArgs e)
-        {
-            if (RR_trackBar.Value != 0)
-                RR_Timer.Interval = RR_trackBar.Value*1000;
-            else
-                RR_Timer.Interval = 1000;
-        }
-
-        private void PIOR_trackBar_Scroll(object sender, EventArgs e)
-        {
-            if (PIOR_trackBar.Value != 0)
-                PIOR_Timer.Interval = PIOR_trackBar.Value*1000;
-            else
-                PIOR_Timer.Interval = 1000;
-        }
-
-        private void SJF_trackBar_Scroll(object sender, EventArgs e)
-        {
-            if (SJF_trackBar.Value != 0)
-                SJF_Timer.Interval = SJF_trackBar.Value*1000;
-            else
-                SJF_Timer.Interval = 1000;
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
+        private void label1_Click(object sender, EventArgs e) { }
+        private void panel2_Paint(object sender, PaintEventArgs e) { }
+        private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void RR_BurstTime_label_Click(object sender, EventArgs e) { }
-
+        /*--------------------------------------------------------------------------------------------------------------------------------*/
         
     }
 }
