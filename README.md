@@ -1,7 +1,11 @@
 # Cpu-Scheduler
 This project is for Operating System Course. it was written based on Windows Forms in Visual Studio with C#.
 ## Aim
-implement a traffic lights system with an on-demand crosswalk button.
+implement a static and dynamic scheduler that supports 
+1. FCFS
+2. SJF (Preemptive and Non Preemptive)
+3. Priority (Preemptive and Non Preemptive) (the smaller the priority number the higher the priority)
+4. Round Robin.
 ## Procedure Details
 -  A live scheduler is run with each 1 unit of time mapped to 1 second
 - Remaining burst time table is updated as time progresses.
