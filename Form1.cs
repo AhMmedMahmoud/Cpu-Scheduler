@@ -208,7 +208,7 @@ namespace DemoGUI
         }
 
         /*----------------------------------static Logic--------------------------------*/
-        private void FCFS_Static_Ok_btn_Click(object sender, EventArgs e)
+        private void FCFS_Ok_btn_Click(object sender, EventArgs e)
         {
             if (
                 string.IsNullOrEmpty(FCFS_NoOfProcesses_textbook.Text)
@@ -943,7 +943,6 @@ namespace DemoGUI
                 SJF_BurstTime_textbook.Clear();
             }
         }
-
 
         /*-------------------------------------static Logic------------------------------*/
         private void SJF_Ok_btn_Click(object sender, EventArgs e)
@@ -1714,7 +1713,6 @@ namespace DemoGUI
 
 
         /*--------------------------------------------------------Start of PIOR functions--------------------------------------------------------*/
-
         private void PIOR_Insert_btn_Click(object sender, EventArgs e)
         {
             if (PIOR_Mode_comboBox.Text == "Static")
@@ -1843,7 +1841,6 @@ namespace DemoGUI
             }
 
         }
-
 
         /*-------------------------------------static Logic------------------------------*/
         private void PIOR_Ok_btn_Click(object sender, EventArgs e)
@@ -3626,4 +3623,81 @@ class ArrivalTimeComparer : IComparer<Process>
     
        waiting time = leaving time - burst time - arrival time
 
+*/
+
+/*      Functions 
+ 
+		private void reset()
+		
+		private void FCFS_Insert_btn_Click(object sender, EventArgs e)
+        private void FCFS_Ok_btn_Click(object sender, EventArgs e)
+        private void FCFS_updateScrolling()
+        private void FCFS_hScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void FCFS_Static_Logic_Display()
+        private void FCFS_Logic()
+        private void FCFS_Display()
+        private void FCFS_updateTable()      
+        private void FCFS_Timer_Tick(object sender, EventArgs e)
+        private void FCFS_JUMPHandler()
+        private void FCFS_trackBar_Scroll(object sender, EventArgs e)
+        private void FCFS_Live_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void FCFS_Jump_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void FCFS_Mode_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void FCFS_Rest()
+        private void FCFS_Reset_btn_Click(object sender, EventArgs e)
+
+		private void SJF_Insert_btn_Click(object sender, EventArgs e)
+		private void SJF_Ok_btn_Click(object sender, EventArgs e)
+		private void SJF_Static_Logic()
+        private void SJF_updateScrolling()
+        private void SJF_hScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void SJF_Static_Display()
+        private void SJF_Logic()
+        private void SJF_Display()
+        private void SJF_updateTable()
+        private void SJF_Timer_Tick(object sender, EventArgs e)
+        private void SJF_JUMPHandler()
+        private void SJF_trackBar_Scroll(object sender, EventArgs e)
+        private void SJF_Version_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void SJF_Live_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void SJF_Jump_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void SJF_Mode_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void SJF_Rest()
+		private void SJF_Reset_btn_Click(object sender, EventArgs e)
+    
+		private void PIOR_Insert_btn_Click(object sender, EventArgs e)
+        private void PIOR_Ok_btn_Click(object sender, EventArgs e)
+        private void PIOR_Static_Logic()
+        private void PIOR_updateScrolling()
+        private void PIOR_hScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void PIOR_Static_Display()
+        private void PIOR_Logic()
+        private void PIOR_Display()
+        private void PIOR_updateTable()
+        private void PIOR_Timer_Tick(object sender, EventArgs e)
+        private void PIOR_JUMPHandler()
+        private void PIOR_trackBar_Scroll(object sender, EventArgs e)
+        private void PIOR_Version_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void PIOR_Jump_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void PIOR_Live_checkBox_CheckedChanged(object sender, EventArgs e)   
+        private void PIOR_Mode_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void PIOR_Rest()
+        private void PIOR_Reset_btn_Click(object sender, EventArgs e)
+        	
+		private void RR_Insert_btn_Click(object sender, EventArgs e)
+        private void RR_Ok_btn_Click(object sender, EventArgs e)
+        private void RR_updateScrolling()
+        private void RR_hScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void RR_Static_Logic_Display()     
+        private void RR_Logic()
+        private void RR_Display()
+        private void RR_updateTable()
+        private void RR_Timer_Tick(object sender, EventArgs e)
+        private void RR_JUMPHandler()
+        private void RR_trackBar_Scroll(object sender, EventArgs e)
+        private void RR_Live_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void RR_Jump_checkBox_CheckedChanged(object sender, EventArgs e)
+        private void RR_Mode_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void RR_Rest()
+        private void RR_Reset_btn_Click(object sender, EventArgs e)
 */

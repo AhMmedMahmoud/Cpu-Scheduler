@@ -1499,7 +1499,7 @@
             this.FCFS_Ok_btn.TabIndex = 5;
             this.FCFS_Ok_btn.Text = "OK";
             this.FCFS_Ok_btn.UseVisualStyleBackColor = true;
-            this.FCFS_Ok_btn.Click += new System.EventHandler(this.FCFS_Static_Ok_btn_Click);
+            this.FCFS_Ok_btn.Click += new System.EventHandler(this.FCFS_Ok_btn_Click);
             // 
             // FCFS_NoOfProcesses_textbook
             // 
