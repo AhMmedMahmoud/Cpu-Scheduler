@@ -301,7 +301,7 @@ namespace DemoGUI
                     if (tempProcess.burst_time < 3)
                         tempLabel_Time.Width = 35;
                     else
-                        tempLabel_Time.Width = tempProcess.burst_time * 10;                
+                        tempLabel_Time.Width = tempProcess.burst_time * 10;
                     FCFS_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -3652,6 +3652,16 @@ namespace DemoGUI
                 SJF_Timer.Interval = SJF_trackBar.Value*1000;
             else
                 SJF_Timer.Interval = 1000;
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         private void RR_BurstTime_label_Click(object sender, EventArgs e) { }
