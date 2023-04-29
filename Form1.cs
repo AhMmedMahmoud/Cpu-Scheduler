@@ -3433,63 +3433,7 @@ namespace DemoGUI
         {
             Reset();
         }
-        /*--------------------------------------------------------End of RR functions--------------------------------------------------------*/
-
-
-
-
-
-        /*--------------------------------------------------------empty Functions------------------------------------------------------------*/
-        private void Form1_Load(object sender, EventArgs e) { }
-        private void FCFS_Click(object sender, EventArgs e) { }
-        private void SJF_Click(object sender, EventArgs e) { }
-        private void Priority_Click(object sender, EventArgs e) { }
-        private void Round_Robin_Click(object sender, EventArgs e) { }
-        private void FCFS_ArrivalTime_label_Click(object sender, EventArgs e) { }
-        private void FCFS_NoOfProcesses_Label_Click(object sender, EventArgs e) { }
-        private void FCFS_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
-        private void FCFS_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void FCFS_BurstTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void FCFS_BurstTime_label_Click(object sender, EventArgs e) { }
-        private void FCFS_dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
-        private void FCFS_Time_flowLayoutPanel1_Paint(object sender, PaintEventArgs e) { }
-        private void FCFS_Slot_label_Click(object sender, EventArgs e) { }
-        private void FCFS_avgWaitingTime_label_Click(object sender, EventArgs e) { }
-        private void FCFS_avgWaitingTimeResult_label_Click(object sender, EventArgs e) { }
-        private void FCFS_CurrentSlot_label_Click(object sender, EventArgs e) { }
-        private void FCFS_avgTurnAroundTime_label_Click(object sender, EventArgs e) { }
-        private void SJF_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
-        private void SJF_BurstTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void SJF_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void SJF_ArrivalTime_label_Click(object sender, EventArgs e) { }
-        private void SJF_NoOfProcess_label_Click(object sender, EventArgs e) { }
-        private void SJF_BurstTime_label_Click(object sender, EventArgs e) { }
-        private void SJF_Time_flowLayoutPanel_Paint(object sender, PaintEventArgs e) { }
-        private void SJF_Time_flowLayoutPanel2_Paint(object sender, PaintEventArgs e) { }
-        private void SJF_Grant_flowLayoutPanel_Paint(object sender, PaintEventArgs e) { }
-        private void SJF_Grant_flowLayoutPanel2_Paint(object sender, PaintEventArgs e) { }
-        private void SJF_dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
-        private void SJF_CurrentSlot_label_Click(object sender, EventArgs e) { }
-        private void SJF_Slot_label_Click(object sender, EventArgs e) { }
-        private void PIOR_Piority_textbook_TextChanged(object sender, EventArgs e) { }
-        private void PIOR_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
-        private void PIOR_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void PIOR_BurstTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void PIOR_ArrivalTime_label_Click(object sender, EventArgs e) { }
-        private void PIOR_NoOfProcess_label_Click(object sender, EventArgs e) { }
-        private void PIOR_BurstTime_label_Click(object sender, EventArgs e) { }
-        private void PIOR_Piority_label_Click(object sender, EventArgs e) { }
-        private void RR_ArrivalTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void RR_NoOfProcess_textbook_TextChanged(object sender, EventArgs e) { }
-        private void RR_BurstTime_textbook_TextChanged(object sender, EventArgs e) { }
-        private void RR_NoOfProcesses_Label_Click(object sender, EventArgs e) { }
-        private void RR_ArrivalTime_label_Click(object sender, EventArgs e) { }
-        private void label1_Click(object sender, EventArgs e) { }
-        private void panel2_Paint(object sender, PaintEventArgs e) { }
-        private void panel1_Paint(object sender, PaintEventArgs e) { }
-        private void RR_BurstTime_label_Click(object sender, EventArgs e) { }
-        /*--------------------------------------------------------------------------------------------------------------------------------*/
-        
+        /*--------------------------------------------------------End of RR functions--------------------------------------------------------*/        
     }
 }
 
