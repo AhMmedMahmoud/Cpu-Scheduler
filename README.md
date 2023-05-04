@@ -16,4 +16,4 @@ live.
 - Average waiting time and average turnaround time
 - Remaining burst time updated table live
 ## Demonstration
-[here](https://drive.google.com/file/d/1NVnRejcDC_ohdHCRu9O2j4KJe9FLmuB0/view?usp=sharing)
+[here](https://drive.google.com/file/d/1CE-hmltcjICXGqMDIkueO-AyZ-7s-FJM/view?usp=sharing)
