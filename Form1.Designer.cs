@@ -1,4 +1,4 @@
-﻿namespace DemoGUI
+﻿namespace OS
 {
     partial class Form1
     {
@@ -21,6 +21,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.SJF_Timer = new System.Windows.Forms.Timer(this.components);
             this.FCFS_Timer = new System.Windows.Forms.Timer(this.components);
             this.PIOR_Timer = new System.Windows.Forms.Timer(this.components);
@@ -412,7 +413,7 @@
             // 
             // RR_hScrollBar
             // 
-            this.RR_hScrollBar.Location = new System.Drawing.Point(26, 807);
+            this.RR_hScrollBar.Location = new System.Drawing.Point(26, 804);
             this.RR_hScrollBar.Name = "RR_hScrollBar";
             this.RR_hScrollBar.Size = new System.Drawing.Size(1028, 27);
             this.RR_hScrollBar.TabIndex = 96;
@@ -440,7 +441,7 @@
             this.RR_Time_flowLayoutPanel.AutoScroll = true;
             this.RR_Time_flowLayoutPanel.Location = new System.Drawing.Point(26, 721);
             this.RR_Time_flowLayoutPanel.Name = "RR_Time_flowLayoutPanel";
-            this.RR_Time_flowLayoutPanel.Size = new System.Drawing.Size(1054, 64);
+            this.RR_Time_flowLayoutPanel.Size = new System.Drawing.Size(1065, 64);
             this.RR_Time_flowLayoutPanel.TabIndex = 97;
             this.RR_Time_flowLayoutPanel.WrapContents = false;
             // 
@@ -813,7 +814,7 @@
             // 
             // PIOR_hScrollBar
             // 
-            this.PIOR_hScrollBar.Location = new System.Drawing.Point(30, 806);
+            this.PIOR_hScrollBar.Location = new System.Drawing.Point(30, 803);
             this.PIOR_hScrollBar.Name = "PIOR_hScrollBar";
             this.PIOR_hScrollBar.Size = new System.Drawing.Size(1028, 27);
             this.PIOR_hScrollBar.TabIndex = 89;
@@ -841,7 +842,7 @@
             this.PIOR_Time_flowLayoutPanel.AutoScroll = true;
             this.PIOR_Time_flowLayoutPanel.Location = new System.Drawing.Point(30, 720);
             this.PIOR_Time_flowLayoutPanel.Name = "PIOR_Time_flowLayoutPanel";
-            this.PIOR_Time_flowLayoutPanel.Size = new System.Drawing.Size(1054, 64);
+            this.PIOR_Time_flowLayoutPanel.Size = new System.Drawing.Size(1066, 64);
             this.PIOR_Time_flowLayoutPanel.TabIndex = 90;
             this.PIOR_Time_flowLayoutPanel.WrapContents = false;
             // 
@@ -971,7 +972,7 @@
             // PIOR_CurrentSlot_label
             // 
             this.PIOR_CurrentSlot_label.AutoSize = true;
-            this.PIOR_CurrentSlot_label.Location = new System.Drawing.Point(1100, 804);
+            this.PIOR_CurrentSlot_label.Location = new System.Drawing.Point(1079, 803);
             this.PIOR_CurrentSlot_label.Name = "PIOR_CurrentSlot_label";
             this.PIOR_CurrentSlot_label.Size = new System.Drawing.Size(26, 29);
             this.PIOR_CurrentSlot_label.TabIndex = 50;
@@ -980,7 +981,7 @@
             // PIOR_Slot_label
             // 
             this.PIOR_Slot_label.AutoSize = true;
-            this.PIOR_Slot_label.Location = new System.Drawing.Point(1148, 804);
+            this.PIOR_Slot_label.Location = new System.Drawing.Point(1147, 803);
             this.PIOR_Slot_label.Name = "PIOR_Slot_label";
             this.PIOR_Slot_label.Size = new System.Drawing.Size(51, 29);
             this.PIOR_Slot_label.TabIndex = 49;
@@ -1112,9 +1113,9 @@
             // 
             // panel4
             // 
-            this.panel4.Location = new System.Drawing.Point(1052, 764);
+            this.panel4.Location = new System.Drawing.Point(1052, 759);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(42, 47);
+            this.panel4.Size = new System.Drawing.Size(53, 47);
             this.panel4.TabIndex = 105;
             // 
             // SJF_trackBar
@@ -1219,21 +1220,21 @@
             // 
             // SJF_Process_flowLayoutPanel2
             // 
-            this.SJF_Process_flowLayoutPanel2.Location = new System.Drawing.Point(66, 575);
+            this.SJF_Process_flowLayoutPanel2.Location = new System.Drawing.Point(61, 575);
             this.SJF_Process_flowLayoutPanel2.Name = "SJF_Process_flowLayoutPanel2";
             this.SJF_Process_flowLayoutPanel2.Size = new System.Drawing.Size(1005, 42);
             this.SJF_Process_flowLayoutPanel2.TabIndex = 91;
             // 
             // SJF_Process_flowLayoutPanel3
             // 
-            this.SJF_Process_flowLayoutPanel3.Location = new System.Drawing.Point(66, 668);
+            this.SJF_Process_flowLayoutPanel3.Location = new System.Drawing.Point(61, 668);
             this.SJF_Process_flowLayoutPanel3.Name = "SJF_Process_flowLayoutPanel3";
             this.SJF_Process_flowLayoutPanel3.Size = new System.Drawing.Size(1005, 42);
             this.SJF_Process_flowLayoutPanel3.TabIndex = 92;
             // 
             // SJF_Time_flowLayoutPanel3
             // 
-            this.SJF_Time_flowLayoutPanel3.Location = new System.Drawing.Point(30, 620);
+            this.SJF_Time_flowLayoutPanel3.Location = new System.Drawing.Point(33, 620);
             this.SJF_Time_flowLayoutPanel3.Name = "SJF_Time_flowLayoutPanel3";
             this.SJF_Time_flowLayoutPanel3.Size = new System.Drawing.Size(1069, 42);
             this.SJF_Time_flowLayoutPanel3.TabIndex = 93;
@@ -1248,7 +1249,7 @@
             // 
             // SJF_Time_flowLayoutPanel2
             // 
-            this.SJF_Time_flowLayoutPanel2.Location = new System.Drawing.Point(30, 527);
+            this.SJF_Time_flowLayoutPanel2.Location = new System.Drawing.Point(33, 527);
             this.SJF_Time_flowLayoutPanel2.Name = "SJF_Time_flowLayoutPanel2";
             this.SJF_Time_flowLayoutPanel2.Size = new System.Drawing.Size(1069, 42);
             this.SJF_Time_flowLayoutPanel2.TabIndex = 90;
@@ -1268,7 +1269,7 @@
             this.SJF_Time_flowLayoutPanel.AutoScroll = true;
             this.SJF_Time_flowLayoutPanel.Location = new System.Drawing.Point(30, 721);
             this.SJF_Time_flowLayoutPanel.Name = "SJF_Time_flowLayoutPanel";
-            this.SJF_Time_flowLayoutPanel.Size = new System.Drawing.Size(1054, 64);
+            this.SJF_Time_flowLayoutPanel.Size = new System.Drawing.Size(1075, 64);
             this.SJF_Time_flowLayoutPanel.TabIndex = 88;
             this.SJF_Time_flowLayoutPanel.WrapContents = false;
             // 
@@ -1378,7 +1379,7 @@
             // SJF_CurrentSlot_label
             // 
             this.SJF_CurrentSlot_label.AutoSize = true;
-            this.SJF_CurrentSlot_label.Location = new System.Drawing.Point(1106, 805);
+            this.SJF_CurrentSlot_label.Location = new System.Drawing.Point(1079, 803);
             this.SJF_CurrentSlot_label.Name = "SJF_CurrentSlot_label";
             this.SJF_CurrentSlot_label.Size = new System.Drawing.Size(26, 29);
             this.SJF_CurrentSlot_label.TabIndex = 30;
@@ -1387,7 +1388,7 @@
             // SJF_Slot_label
             // 
             this.SJF_Slot_label.AutoSize = true;
-            this.SJF_Slot_label.Location = new System.Drawing.Point(1145, 805);
+            this.SJF_Slot_label.Location = new System.Drawing.Point(1147, 803);
             this.SJF_Slot_label.Name = "SJF_Slot_label";
             this.SJF_Slot_label.Size = new System.Drawing.Size(51, 29);
             this.SJF_Slot_label.TabIndex = 29;
@@ -1537,14 +1538,14 @@
             // 
             // FCFS_Process_flowLayoutPanel2
             // 
-            this.FCFS_Process_flowLayoutPanel2.Location = new System.Drawing.Point(83, 558);
+            this.FCFS_Process_flowLayoutPanel2.Location = new System.Drawing.Point(77, 557);
             this.FCFS_Process_flowLayoutPanel2.Name = "FCFS_Process_flowLayoutPanel2";
             this.FCFS_Process_flowLayoutPanel2.Size = new System.Drawing.Size(1005, 42);
             this.FCFS_Process_flowLayoutPanel2.TabIndex = 98;
             // 
             // FCFS_Process_flowLayoutPanel3
             // 
-            this.FCFS_Process_flowLayoutPanel3.Location = new System.Drawing.Point(83, 651);
+            this.FCFS_Process_flowLayoutPanel3.Location = new System.Drawing.Point(77, 651);
             this.FCFS_Process_flowLayoutPanel3.Name = "FCFS_Process_flowLayoutPanel3";
             this.FCFS_Process_flowLayoutPanel3.Size = new System.Drawing.Size(1005, 42);
             this.FCFS_Process_flowLayoutPanel3.TabIndex = 99;
@@ -1558,7 +1559,7 @@
             // 
             // FCFS_hScrollBar
             // 
-            this.FCFS_hScrollBar.Location = new System.Drawing.Point(47, 790);
+            this.FCFS_hScrollBar.Location = new System.Drawing.Point(47, 788);
             this.FCFS_hScrollBar.Name = "FCFS_hScrollBar";
             this.FCFS_hScrollBar.Size = new System.Drawing.Size(1028, 27);
             this.FCFS_hScrollBar.TabIndex = 94;
@@ -1586,7 +1587,7 @@
             this.FCFS_Time_flowLayoutPanel.AutoScroll = true;
             this.FCFS_Time_flowLayoutPanel.Location = new System.Drawing.Point(47, 704);
             this.FCFS_Time_flowLayoutPanel.Name = "FCFS_Time_flowLayoutPanel";
-            this.FCFS_Time_flowLayoutPanel.Size = new System.Drawing.Size(1054, 64);
+            this.FCFS_Time_flowLayoutPanel.Size = new System.Drawing.Size(1068, 64);
             this.FCFS_Time_flowLayoutPanel.TabIndex = 95;
             this.FCFS_Time_flowLayoutPanel.WrapContents = false;
             // 
@@ -1773,7 +1774,7 @@
             // FCFS_CurrentSlot_label
             // 
             this.FCFS_CurrentSlot_label.AutoSize = true;
-            this.FCFS_CurrentSlot_label.Location = new System.Drawing.Point(1107, 803);
+            this.FCFS_CurrentSlot_label.Location = new System.Drawing.Point(1079, 803);
             this.FCFS_CurrentSlot_label.Name = "FCFS_CurrentSlot_label";
             this.FCFS_CurrentSlot_label.Size = new System.Drawing.Size(26, 29);
             this.FCFS_CurrentSlot_label.TabIndex = 33;
@@ -1782,7 +1783,7 @@
             // FCFS_Slot_label
             // 
             this.FCFS_Slot_label.AutoSize = true;
-            this.FCFS_Slot_label.Location = new System.Drawing.Point(1139, 803);
+            this.FCFS_Slot_label.Location = new System.Drawing.Point(1147, 803);
             this.FCFS_Slot_label.Name = "FCFS_Slot_label";
             this.FCFS_Slot_label.Size = new System.Drawing.Size(51, 29);
             this.FCFS_Slot_label.TabIndex = 32;
@@ -1866,8 +1867,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 889);
             this.Controls.Add(this.PIO_NoOfProcesses_textbook);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Scheduler";
             this.Round_Robin.ResumeLayout(false);
             this.Round_Robin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RR_trackBar)).EndInit();

@@ -18,10 +18,15 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using WF = System.Windows.Forms;
 
 
-namespace DemoGUI
+namespace OS
 {
     public partial class Form1 : Form
     {
+        const int MIN_PROCESS_SLOT_WIDTH = 60;
+        const int MAX_PAGE = 22;
+        const int MAX_PROCESS_SLOT_WIDTH = 300;
+        const int BURST_TIME_barrier = 5;
+
         int numOfProcess;
 
         Queue<Process> FCFS_Input_Queue = new Queue<Process>();
@@ -270,11 +275,10 @@ namespace DemoGUI
                 tempProcess = array[i];
                 if (FCFS_ACC < tempProcess.arrival_time)
                 {
-                    noOfIdleSlot++;
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = FCFS_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     FCFS_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -282,10 +286,11 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     FCFS_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*--------------------update FCFS__ACC------------------------*/
-                    FCFS_ACC += 1;
+                    noOfIdleSlot += (tempProcess.arrival_time - FCFS_ACC);
+                    FCFS_ACC = tempProcess.arrival_time;
                     i--;
                 }
                 else
@@ -293,10 +298,10 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = FCFS_ACC.ToString();
-                    if (tempProcess.burst_time < 3)
-                        tempLabel_Time.Width = 35;
+                    if (tempProcess.burst_time < BURST_TIME_barrier)
+                        tempLabel_Time.Width = tempProcess.burst_time*MIN_PROCESS_SLOT_WIDTH;
                     else
-                        tempLabel_Time.Width = tempProcess.burst_time * 10;
+                        tempLabel_Time.Width = MAX_PROCESS_SLOT_WIDTH;      
                     FCFS_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -304,10 +309,10 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                    if (tempProcess.burst_time < 3)
-                        tempLabel_Process.Width = 35;
+                    if (tempProcess.burst_time < BURST_TIME_barrier)
+                        tempLabel_Process.Width = tempProcess.burst_time*MIN_PROCESS_SLOT_WIDTH;
                     else
-                        tempLabel_Process.Width = tempProcess.burst_time * 10;
+                        tempLabel_Process.Width = MAX_PROCESS_SLOT_WIDTH;
                     FCFS_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*--------------------update FCFS_ACC-------------------------*/
                     FCFS_ACC += tempProcess.burst_time;
@@ -354,8 +359,8 @@ namespace DemoGUI
             /*-----------------time chart---------------------------------*/
             WF.Label tempLabel_Time = new WF.Label();
             tempLabel_Time.Text = FCFS_Time_Acc.ToString();
-            tempLabel_Time.Width = 35;
-            if(!FCFS_Page)
+            tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
+            if (!FCFS_Page)
                 FCFS_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
             else
                 FCFS_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
@@ -365,7 +370,7 @@ namespace DemoGUI
             tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
             tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
             tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-            tempLabel_Process.Width = 35;
+            tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
             if(!FCFS_Page)
                 FCFS_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
             else
@@ -407,7 +412,7 @@ namespace DemoGUI
         {
             if (!FCFS_Jump)
             {
-                if (FCFS_ACC != 0 && FCFS_ACC %36 == 0 && FCFS_Page)
+                if (FCFS_ACC != 0 && FCFS_ACC % MAX_PAGE == 0 && FCFS_Page)
                 {
                     FCFS_Time_flowLayoutPanel2.Controls.Clear();
                     FCFS_Process_flowLayoutPanel2.Controls.Clear();
@@ -415,7 +420,7 @@ namespace DemoGUI
                     FCFS_Process_flowLayoutPanel3.Controls.Clear();
                     FCFS_Page = !FCFS_Page;
                 }
-                else if (FCFS_ACC != 0 && FCFS_ACC % 18 == 0)
+                else if (FCFS_ACC != 0 && FCFS_ACC % (MAX_PAGE/2) == 0)
                     FCFS_Page = !FCFS_Page;
 
 
@@ -436,7 +441,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = FCFS_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!FCFS_Page)
                         FCFS_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -447,7 +452,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!FCFS_Page)
                         FCFS_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -467,7 +472,7 @@ namespace DemoGUI
         {
             while(true)
             {
-                if (FCFS_ACC != 0 && FCFS_ACC %36 == 0 && FCFS_Page)
+                if (FCFS_ACC != 0 && FCFS_ACC % MAX_PAGE == 0 && FCFS_Page)
                 {
                     FCFS_Time_flowLayoutPanel2.Controls.Clear();
                     FCFS_Process_flowLayoutPanel2.Controls.Clear();
@@ -475,7 +480,7 @@ namespace DemoGUI
                     FCFS_Process_flowLayoutPanel3.Controls.Clear();
                     FCFS_Page = !FCFS_Page;
                 }
-                else if (FCFS_ACC != 0 && FCFS_ACC % 18 == 0)
+                else if (FCFS_ACC != 0 && FCFS_ACC % (MAX_PAGE/2) == 0)
                     FCFS_Page = !FCFS_Page;
 
 
@@ -492,7 +497,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = FCFS_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!FCFS_Page)
                         FCFS_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -503,7 +508,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!FCFS_Page)
                         FCFS_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -630,19 +635,13 @@ namespace DemoGUI
                 FCFS_avgTurnAroundTime_label.Enabled = false;
                 FCFS_avgTurnAroundTime_label.Visible = false;
 
-                //FCFS_Speed_label.Enabled = false;
-                //FCFS_Speed_label.Visible=false;
                 FCFS_trackBar.Enabled = false;
                 FCFS_trackBar.Visible = false;
-                //FCFS_Seconds.Visible = false;
             }
             else if (FCFS_Mode_comboBox.Text == "Dynamic")
             {
-                //FCFS_Speed_label.Enabled = true;
-                //FCFS_Speed_label.Visible=true;
                 FCFS_trackBar.Enabled = true;
                 FCFS_trackBar.Visible = true;
-                //FCFS_Seconds.Visible = true;
 
                 FCFS_hScrollBar.Enabled = false;
                 FCFS_hScrollBar.Visible = false;
@@ -808,13 +807,10 @@ namespace DemoGUI
             FCFS_avgTurnAroundTime_label.Visible = false;
             FCFS_avgTurnAroundTime_textBox.Text = "0";
 
-            //FCFS_Speed_label.Enabled = false;
-            //FCFS_Speed_label.Visible=false;
             FCFS_trackBar.Enabled = false;
             FCFS_trackBar.Visible = false;
             FCFS_trackBar.Value = 0;
             FCFS_Timer.Interval = 1000;
-            //FCFS_Seconds.Visible = false;
         }
         private void FCFS_Reset_btn_Click(object sender, EventArgs e)
         {
@@ -1059,7 +1055,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = SJF_Time_Acc.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     SJF_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -1067,11 +1063,11 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     SJF_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*--------------------update SJF__ACC------------------------*/
-                    SJF_Time_Acc += 1;
-                    noOfIdleSlot++;
+                    noOfIdleSlot =+(tempProcess.arrival_time- SJF_Time_Acc);
+                    SJF_Time_Acc = tempProcess.arrival_time;
                 }
                 else
                 {
@@ -1079,10 +1075,10 @@ namespace DemoGUI
                     /*----------------------------------time chart---------------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = SJF_Time_Acc.ToString();
-                    if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                        tempLabel_Time.Width = 35;
+                    if (tempProcess.burst_time-tempProcess.arrival_time < BURST_TIME_barrier)
+                        tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) *MIN_PROCESS_SLOT_WIDTH;
                     else
-                        tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+                        tempLabel_Time.Width =  MAX_PROCESS_SLOT_WIDTH;
                     SJF_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------------------gantt chart code--------------------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -1090,10 +1086,10 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                    if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                        tempLabel_Process.Width = 35;
+                    if (tempProcess.burst_time-tempProcess.arrival_time < BURST_TIME_barrier)
+                        tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) *MIN_PROCESS_SLOT_WIDTH;
                     else
-                        tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10; 
+                        tempLabel_Process.Width = MAX_PROCESS_SLOT_WIDTH;   
                     SJF_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*---------------------------------update SJF_ACC-------------------------------------*/
                     SJF_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
@@ -1139,13 +1135,13 @@ namespace DemoGUI
             int len, timeGivenToProcessOnCpu, first_index, last_index;
             Process[] array;
 
-            /*-----------------------------------------------------sort the queue of processes------------------------------------------------------------*/
+            /*---------------sort the queue of processes---------*/
             array = SJF_Input_Queue.ToArray();
             Array.Sort(array, new ArrivalTimeComparer());
             len = SJF_Input_Queue.Count;
             first_index = 0;
             SJF_ACC = array[0].arrival_time;
-            /*-----select  processes that have min arrival time then choose from them the process whose burst time is minimum -------*/
+            /*-----from processes that have min arrival time choose the process whose burst time is minimum -------*/
             for (int i = 0; i<len; i++)
             {
                 if (array[i].arrival_time <= SJF_ACC && array[i].burst_time < array[first_index].burst_time)
@@ -1154,7 +1150,7 @@ namespace DemoGUI
             last_index = first_index;
             while (last_index < len-1 && array[first_index].arrival_time == array[last_index+1].arrival_time)
                 last_index++;
-            /*----------------------------OPTION Add 1S of process to Display Queue---------------*/
+            /*------------------------OPTION Add 1S of process to Display Queue---------------*/
             if (SJF_Preemtive_Version)
             {
                 timeGivenToProcessOnCpu = 1;
@@ -1162,7 +1158,7 @@ namespace DemoGUI
 
                 SJF_Display_Queue.Enqueue(array[first_index].copy(timeGivenToProcessOnCpu));
             }
-            /*----------------------------OPTION Add many 1s of process to Display Queue----------*/
+            /*---------------OPTION Add many 1s of process to Display Queue-------------------*/
             else
             {
                 timeGivenToProcessOnCpu = array[first_index].burst_time;
@@ -1190,42 +1186,27 @@ namespace DemoGUI
         {
             int SJF_Time_Acc = SJF_Display_Queue.Peek().arrival_time;
             Process tempProcess;
-            while (SJF_Display_Queue.Count != 0)
-            {
-                tempProcess = SJF_Display_Queue.Dequeue();
-                /*----------------------------------time chart---------------------------------------*/
-                WF.Label tempLabel_Time = new WF.Label();
-                tempLabel_Time.Text = SJF_Time_Acc.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Time.Width = 35;
-                else
-                    tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
 
-                if (!SJF_Page)
-                    SJF_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
-                else
-                    SJF_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
-                /*------------------------------gantt chart code--------------------------------------*/
-                WF.Label tempLabel_Process = new WF.Label();
-                tempLabel_Process.Enabled = true;
-                tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
-                tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
-                tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Process.Width = 35;
-                else
-                    tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!SJF_Page)
-                    SJF_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
-                else
-                    SJF_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
-                /*---------------------------------update SJF_ACC-------------------------------------*/
-                SJF_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
-                /*-----------------------------------Finishing Algorithm------------------------------*/
-                if (SJF_Live)
-                    break;
-            }
+            tempProcess = SJF_Display_Queue.Dequeue();
+            /*----------------------------------time chart---------------------------------------*/
+            WF.Label tempLabel_Time = new WF.Label();
+            tempLabel_Time.Text = SJF_Time_Acc.ToString();
+            tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
+            if (!SJF_Page)
+                SJF_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
+            else
+                SJF_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
+            /*------------------------------gantt chart code--------------------------------------*/
+            WF.Label tempLabel_Process = new WF.Label();
+            tempLabel_Process.Enabled = true;
+            tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
+            tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
+            tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
+            tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
+            if (!SJF_Page)
+                SJF_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
+            else
+                SJF_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
         }
         private void SJF_updateTable()
         {
@@ -1267,7 +1248,7 @@ namespace DemoGUI
         {
             if (!SJF_Jump)
             {
-                if (SJF_ACC != 0 && SJF_ACC %36 == 0 && SJF_Page)
+                if (SJF_ACC != 0 && SJF_ACC %MAX_PAGE == 0 && SJF_Page)
                 {
                     SJF_Time_flowLayoutPanel2.Controls.Clear();
                     SJF_Process_flowLayoutPanel2.Controls.Clear();
@@ -1275,7 +1256,7 @@ namespace DemoGUI
                     SJF_Process_flowLayoutPanel3.Controls.Clear();
                     SJF_Page = !SJF_Page;
                 }
-                else if (SJF_ACC != 0 && SJF_ACC % 18 == 0)
+                else if (SJF_ACC != 0 && SJF_ACC % (MAX_PAGE/2) == 0)
                     SJF_Page = !SJF_Page;
 
                 if (!SJF_Preemtive_Version && SJF_Input_Queue.Count != 0 && SJF_ACC == SJF_NextPossibleSlot)
@@ -1305,7 +1286,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = SJF_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!SJF_Page)
                         SJF_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -1316,7 +1297,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!SJF_Page)
                         SJF_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -1335,7 +1316,7 @@ namespace DemoGUI
         {
             while (true)
             {
-                if (SJF_ACC != 0 && SJF_ACC %36 == 0 && SJF_Page)
+                if (SJF_ACC != 0 && SJF_ACC %MAX_PAGE == 0 && SJF_Page)
                 {
                     SJF_Time_flowLayoutPanel2.Controls.Clear();
                     SJF_Process_flowLayoutPanel2.Controls.Clear();
@@ -1343,7 +1324,7 @@ namespace DemoGUI
                     SJF_Process_flowLayoutPanel3.Controls.Clear();
                     SJF_Page = !SJF_Page;
                 }
-                else if (SJF_ACC != 0 && SJF_ACC % 18 == 0)
+                else if (SJF_ACC != 0 && SJF_ACC % (MAX_PAGE/2) == 0)
                     SJF_Page = !SJF_Page;
 
 
@@ -1360,7 +1341,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = SJF_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!SJF_Page)
                         SJF_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -1371,7 +1352,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!SJF_Page)
                         SJF_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -1506,20 +1487,13 @@ namespace DemoGUI
                 SJF_Version_checkBox.Enabled = true;
                 SJF_Version_checkBox.Visible = true;
 
-                //SJF_Speed_label.Enabled = false;
-                //SJF_Speed_label.Visible=false;
                 SJF_trackBar.Enabled = false;
                 SJF_trackBar.Visible = false;
-                //SJF_Seconds.Visible = false;
             }
             else if (SJF_Mode_comboBox.Text == "Dynamic")
             {
-                //SJF_Speed_label.Enabled = true;
-                //SJF_Speed_label.Visible= true;
                 SJF_trackBar.Enabled = true;
                 SJF_trackBar.Visible = true;
-                //SJF_Seconds.Visible = true;
-
 
                 SJF_hScrollBar.Enabled = false;
                 SJF_hScrollBar.Visible = false;
@@ -1692,13 +1666,10 @@ namespace DemoGUI
             SJF_Version_checkBox.Enabled = false;
             SJF_Version_checkBox.Visible = false;
 
-            //SJF_Speed_label.Enabled = false;
-            //SJF_Speed_label.Visible=false;
             SJF_trackBar.Enabled = false;
             SJF_trackBar.Visible = false;
             SJF_trackBar.Value = 0;
             SJF_Timer.Interval = 1000;
-            //SJF_Seconds.Visible = false;
         }
         private void SJF_Reset_btn_Click(object sender, EventArgs e)
         {
@@ -1890,7 +1861,7 @@ namespace DemoGUI
                 first_index = 0;
                 PIOR_ACC = array[0].arrival_time;
 
-                /*-----select  processes that have min arrival time then choose from them the process whose piority is minimum -------*/
+                /*-----from processes that have min arrival time choose the process whose piority is minimum -------*/
                 for (int i = 0; i<len; i++)
                 {
                     if (array[i].arrival_time <= PIOR_ACC && array[i].piority < array[first_index].piority)
@@ -1962,7 +1933,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = PIOR_Time_Acc.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width =  MIN_PROCESS_SLOT_WIDTH;
                     PIOR_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -1970,11 +1941,12 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width =  MIN_PROCESS_SLOT_WIDTH;
                     PIOR_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*--------------------update PIOR_ACC-------------------------*/
-                    PIOR_Time_Acc += 1;
-                    noOfIdleSlot++;
+                    noOfIdleSlot += (tempProcess.arrival_time-PIOR_Time_Acc);
+                    PIOR_Time_Acc = tempProcess.arrival_time;
+                    
                 }
                 else
                 {
@@ -1982,10 +1954,10 @@ namespace DemoGUI
                     /*----------------------------------time chart---------------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = PIOR_Time_Acc.ToString();
-                    if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                        tempLabel_Time.Width = 35;
+                    if (tempProcess.burst_time-tempProcess.arrival_time < BURST_TIME_barrier)
+                        tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) *MIN_PROCESS_SLOT_WIDTH;
                     else
-                        tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+                        tempLabel_Time.Width = MAX_PROCESS_SLOT_WIDTH;
                     PIOR_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------------------gantt chart code--------------------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -1993,10 +1965,10 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                    if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                        tempLabel_Process.Width = 35;
+                    if (tempProcess.burst_time-tempProcess.arrival_time < BURST_TIME_barrier)
+                        tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) *MIN_PROCESS_SLOT_WIDTH;
                     else
-                        tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
+                        tempLabel_Process.Width = MAX_PROCESS_SLOT_WIDTH;
                     PIOR_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*---------------------------------update SJF_ACC-------------------------------------*/
                     PIOR_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
@@ -2095,42 +2067,27 @@ namespace DemoGUI
         {
             int PIOR_Time_Acc = PIOR_Display_Queue.Peek().arrival_time;
             Process tempProcess;
-            while (PIOR_Display_Queue.Count != 0)
-            {
-                tempProcess = PIOR_Display_Queue.Dequeue();
-                /*----------------------------------time chart---------------------------------------*/
-                WF.Label tempLabel_Time = new WF.Label();
-                tempLabel_Time.Text = PIOR_Time_Acc.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Time.Width = 35;
-                else
-                    tempLabel_Time.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!PIOR_Page)
-                    PIOR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
-                else
-                    PIOR_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
-                /*------------------------------gantt chart code--------------------------------------*/
-                WF.Label tempLabel_Process = new WF.Label();
-                tempLabel_Process.Enabled = true;
-                tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
-                tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
-                tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                if (tempProcess.burst_time-tempProcess.arrival_time < 3)
-                    tempLabel_Process.Width = 35;
-                else
-                    tempLabel_Process.Width = (tempProcess.burst_time-tempProcess.arrival_time) * 10;
-
-                if (!PIOR_Page)
-                    PIOR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
-                else
-                    PIOR_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
-                /*---------------------------------update PIOR_ACC-------------------------------------*/
-                PIOR_Time_Acc += (tempProcess.burst_time-tempProcess.arrival_time);
-                /*-----------------------------------Finishing Algorithm------------------------------*/
-                if (PIOR_Live)
-                    break;
-            }
+           
+            tempProcess = PIOR_Display_Queue.Dequeue();
+            /*----------------------------------time chart---------------------------------------*/
+            WF.Label tempLabel_Time = new WF.Label();
+            tempLabel_Time.Text = PIOR_Time_Acc.ToString();
+            tempLabel_Time.Width =  MIN_PROCESS_SLOT_WIDTH;
+            if (!PIOR_Page)
+                PIOR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
+            else
+                PIOR_Time_flowLayoutPanel3.Controls.Add(tempLabel_Time);
+            /*------------------------------gantt chart code--------------------------------------*/
+            WF.Label tempLabel_Process = new WF.Label();
+            tempLabel_Process.Enabled = true;
+            tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
+            tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
+            tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
+            tempLabel_Process.Width =  MIN_PROCESS_SLOT_WIDTH;
+            if (!PIOR_Page)
+                PIOR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
+            else
+                PIOR_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
         }
         private void PIOR_updateTable()
         {
@@ -2172,7 +2129,7 @@ namespace DemoGUI
         {
             if (!PIOR_Jump)
             {
-                if (PIOR_ACC != 0 && PIOR_ACC %36 == 0 && PIOR_Page)
+                if (PIOR_ACC != 0 && PIOR_ACC % MAX_PAGE == 0 && PIOR_Page)
                 {
                     PIOR_Time_flowLayoutPanel2.Controls.Clear();
                     PIOR_Process_flowLayoutPanel2.Controls.Clear();
@@ -2180,7 +2137,7 @@ namespace DemoGUI
                     PIOR_Process_flowLayoutPanel3.Controls.Clear();
                     PIOR_Page = !PIOR_Page;
                 }
-                else if (PIOR_ACC != 0 && PIOR_ACC % 18 == 0)
+                else if (PIOR_ACC != 0 && PIOR_ACC % (MAX_PAGE/2) == 0)
                     PIOR_Page = !PIOR_Page;
 
 
@@ -2211,7 +2168,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = PIOR_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width =  MIN_PROCESS_SLOT_WIDTH;
                     if (!PIOR_Page)
                         PIOR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -2222,7 +2179,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width =  MIN_PROCESS_SLOT_WIDTH;
                     if (!PIOR_Page)
                         PIOR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -2241,7 +2198,7 @@ namespace DemoGUI
         {
             while (true)
             {
-                if (PIOR_ACC != 0 && PIOR_ACC %36 == 0 && PIOR_Page)
+                if (PIOR_ACC != 0 && PIOR_ACC %MAX_PAGE == 0 && PIOR_Page)     
                 {
                     PIOR_Time_flowLayoutPanel2.Controls.Clear();
                     PIOR_Process_flowLayoutPanel2.Controls.Clear();
@@ -2249,7 +2206,7 @@ namespace DemoGUI
                     PIOR_Process_flowLayoutPanel3.Controls.Clear();
                     PIOR_Page = !PIOR_Page;
                 }
-                else if (PIOR_ACC != 0 && PIOR_ACC % 18 == 0)
+                else if (PIOR_ACC != 0 && PIOR_ACC % (MAX_PAGE/2) == 0)  
                     PIOR_Page = !PIOR_Page;
 
 
@@ -2266,7 +2223,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = PIOR_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!PIOR_Page)
                         PIOR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -2277,7 +2234,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!PIOR_Page)
                         PIOR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -2835,7 +2792,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = RR_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     RR_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -2843,11 +2800,11 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     RR_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*--------------------update RR_ACC--------------------------*/
-                    RR_ACC += 1;
-                    noOfIdleSlot++;
+                    noOfIdleSlot += (tempProcess.arrival_time - RR_ACC);
+                    RR_ACC = tempProcess.arrival_time;
                 }
                 else
                 {
@@ -2857,18 +2814,14 @@ namespace DemoGUI
                     tempLabel_Time.Text = RR_ACC.ToString();
 
                     if (tempProcess.burst_time > RR_QuantamTime)
-                    {
                         timeGiven = RR_QuantamTime;
-                    }
                     else
-                    {
                         timeGiven = tempProcess.burst_time;
-                    }
-                    if (timeGiven < 3)
-                        tempLabel_Time.Width = 35;
+
+                    if (timeGiven < 5)
+                        tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH*timeGiven;
                     else
-                        tempLabel_Time.Width = timeGiven * 10;
-                    
+                        tempLabel_Time.Width = MAX_PROCESS_SLOT_WIDTH;
                     RR_Time_flowLayoutPanel.Controls.Add(tempLabel_Time);
                     /*------------------gantt chart code--------------------------*/
                     WF.Label tempLabel_Process = new WF.Label();
@@ -2876,11 +2829,10 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-                    if (timeGiven < 3)
-                        tempLabel_Process.Width = 35;
+                    if (timeGiven < 5)
+                        tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH*timeGiven;
                     else
-                        tempLabel_Process.Width = timeGiven * 10;
-
+                        tempLabel_Process.Width = MAX_PROCESS_SLOT_WIDTH;
                     RR_Process_flowLayoutPanel.Controls.Add(tempLabel_Process);
                     /*--------------------update RR_ACC---------------------------*/
                     RR_ACC += timeGiven;
@@ -2891,7 +2843,7 @@ namespace DemoGUI
                         Queue<Process> copiedQueue = new Queue<Process>(RR_Input_Queue);
                         foreach (Process p in copiedQueue)
                         {
-                            if (p.arrival_time > RR_ACC) // was > only
+                            if (p.arrival_time > RR_ACC)
                             {
                                 List<Process> tempList = new List<Process>(RR_Input_Queue); // convert the array into a list
                                 tempList.Insert(count, tempProcess); // insert the new object at the desired index
@@ -2903,9 +2855,9 @@ namespace DemoGUI
                         if(count == copiedQueue.Count)
                             RR_Input_Queue.Enqueue(tempProcess);
                     }
+                    /*--------------average waiting time-----------------------*/
                     else
                     {
-                        /*--------------average waiting time-----------------------*/
                         foreach (DataGridViewRow row in RR_dataGridView.Rows)
                         {
                             if (row.Cells[0].Value.ToString() == tempProcess.Pid.ToString())
@@ -2977,7 +2929,7 @@ namespace DemoGUI
             /*-----------------time chart---------------------------------*/
             WF.Label tempLabel_Time = new WF.Label();
             tempLabel_Time.Text = RR_Time_Acc.ToString();
-            tempLabel_Time.Width = 35;
+            tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
             if (!RR_Page)
                 RR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
             else
@@ -2988,7 +2940,7 @@ namespace DemoGUI
             tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
             tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
             tempLabel_Process.Text = "P" + tempProcess.Pid.ToString();
-            tempLabel_Process.Width = 35;
+            tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
             if (!RR_Page)
                 RR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
             else
@@ -3034,7 +2986,7 @@ namespace DemoGUI
         {
             if (!RR_Jump)
             {
-                if (RR_ACC != 0 && RR_ACC %36 == 0 && RR_Page)
+                if (RR_ACC != 0 && RR_ACC %MAX_PAGE == 0 && RR_Page)
                 {
                     RR_Time_flowLayoutPanel2.Controls.Clear();
                     RR_Process_flowLayoutPanel2.Controls.Clear();
@@ -3042,7 +2994,7 @@ namespace DemoGUI
                     RR_Process_flowLayoutPanel3.Controls.Clear();
                     RR_Page = !RR_Page;
                 }
-                else if (RR_ACC != 0 && RR_ACC % 18 == 0)
+                else if (RR_ACC != 0 && RR_ACC % (MAX_PAGE/2) == 0)
                     RR_Page = !RR_Page;
 
 
@@ -3072,7 +3024,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = RR_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!RR_Page)
                         RR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -3083,7 +3035,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!RR_Page)
                         RR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
@@ -3103,7 +3055,7 @@ namespace DemoGUI
         {
             while (true)
             {
-                if (RR_ACC != 0 && RR_ACC %36 == 0 && RR_Page)
+                if (RR_ACC != 0 && RR_ACC %MAX_PAGE == 0 && RR_Page)
                 {
                     RR_Time_flowLayoutPanel2.Controls.Clear();
                     RR_Process_flowLayoutPanel2.Controls.Clear();
@@ -3111,7 +3063,7 @@ namespace DemoGUI
                     RR_Process_flowLayoutPanel3.Controls.Clear();
                     RR_Page = !RR_Page;
                 }
-                else if (RR_ACC != 0 && RR_ACC % 18 == 0)
+                else if (RR_ACC != 0 && RR_ACC % (MAX_PAGE/2) == 0)
                     RR_Page = !RR_Page;
 
 
@@ -3138,7 +3090,7 @@ namespace DemoGUI
                     /*-----------------time chart---------------------------------*/
                     WF.Label tempLabel_Time = new WF.Label();
                     tempLabel_Time.Text = RR_ACC.ToString();
-                    tempLabel_Time.Width = 35;
+                    tempLabel_Time.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!RR_Page)
                         RR_Time_flowLayoutPanel2.Controls.Add(tempLabel_Time);
                     else
@@ -3149,7 +3101,7 @@ namespace DemoGUI
                     tempLabel_Process.BorderStyle = BorderStyle.FixedSingle;
                     tempLabel_Process.Font = new Font("Arial", 10, FontStyle.Bold);
                     tempLabel_Process.Text = "IDLE";
-                    tempLabel_Process.Width = 35;
+                    tempLabel_Process.Width = MIN_PROCESS_SLOT_WIDTH;
                     if (!RR_Page)
                         RR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
