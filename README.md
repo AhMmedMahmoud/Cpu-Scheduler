@@ -1,5 +1,9 @@
 # Cpu-Scheduler
-This project is for Operating System Course. it was written based on Windows Forms in Visual Studio with C#.
+- This project is for Operating System Course.
+- Language: C#
+- Development environment: Visual Studio
+- Platform: .NET Framework
+- Project type: Windows Forms Application
 ## Aim
 implement a static and dynamic scheduler that supports 
 1. FCFS
