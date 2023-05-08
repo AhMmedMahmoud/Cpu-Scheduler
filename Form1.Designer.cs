@@ -278,7 +278,7 @@
             // 
             // panel8
             // 
-            this.panel8.Location = new System.Drawing.Point(1049, 761);
+            this.panel8.Location = new System.Drawing.Point(1049, 759);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(42, 47);
             this.panel8.TabIndex = 113;
@@ -608,7 +608,7 @@
             // RR_CurrentSlot_label
             // 
             this.RR_CurrentSlot_label.AutoSize = true;
-            this.RR_CurrentSlot_label.Location = new System.Drawing.Point(1106, 799);
+            this.RR_CurrentSlot_label.Location = new System.Drawing.Point(1079, 804);
             this.RR_CurrentSlot_label.Name = "RR_CurrentSlot_label";
             this.RR_CurrentSlot_label.Size = new System.Drawing.Size(26, 29);
             this.RR_CurrentSlot_label.TabIndex = 52;
@@ -617,7 +617,7 @@
             // RR_Slot_label
             // 
             this.RR_Slot_label.AutoSize = true;
-            this.RR_Slot_label.Location = new System.Drawing.Point(1138, 799);
+            this.RR_Slot_label.Location = new System.Drawing.Point(1147, 803);
             this.RR_Slot_label.Name = "RR_Slot_label";
             this.RR_Slot_label.Size = new System.Drawing.Size(51, 29);
             this.RR_Slot_label.TabIndex = 51;

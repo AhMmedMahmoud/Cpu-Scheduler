@@ -3083,6 +3083,11 @@ namespace OS
                 {
                     RR_updateTable();
                     RR_Display();
+
+
+                    ////////////////////////
+                    RR_Timer.Interval = 1;
+                    ////////////////////////
                 }
                 else
                 {
@@ -3106,6 +3111,13 @@ namespace OS
                         RR_Process_flowLayoutPanel2.Controls.Add(tempLabel_Process);
                     else
                         RR_Process_flowLayoutPanel3.Controls.Add(tempLabel_Process);
+
+                    ////////////////////////
+                    if (RR_trackBar.Value != 0)
+                        RR_Timer.Interval = RR_trackBar.Value*1000;
+                    else
+                        RR_Timer.Interval = 1000;
+                    /////////////////////////
                 }
                 RR_ACC++;
                 RR_CurrentSlot_label.Text = RR_ACC.ToString();
@@ -3162,6 +3174,12 @@ namespace OS
             else
             {
                 RR_Jump = false;
+                ////////////////////////////////////////////////
+                if (RR_trackBar.Value != 0)
+                    RR_Timer.Interval = RR_trackBar.Value*1000;
+                else
+                    RR_Timer.Interval = 1000;
+                ///////////////////////////////////////////////
             }
         }
 
