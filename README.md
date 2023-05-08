@@ -19,5 +19,15 @@ implement a static and dynamic scheduler that supports
 live.
 - Average waiting time and average turnaround time
 - Remaining burst time updated table live
+## Extra Features
+- user can enter big numbers in  arrival time
+- user can enter big numbers in  burst time
+- user can enter big numbers in  number of processes
+- user can make big idle time between processes
+- user can pause scheduler and resume it during live scheduling
+- user can switch from preemptive to non-preemptive, or vice versa during live scheduling
+- jump in time option during live scheduling
+- speed up or down option during live scheduling
+- reset option
 ## Demonstration
 [here](https://drive.google.com/file/d/1CE-hmltcjICXGqMDIkueO-AyZ-7s-FJM/view?usp=sharing)
